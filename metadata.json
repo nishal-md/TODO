@@ -1,0 +1,7 @@
+{
+  "name": "du",
+  "description": "A minimalist, high-performance task manager with integrated Pomodoro timer and calendar views.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
