@@ -1,4 +1,10 @@
 
+export interface Subtask {
+  id: string;
+  text: string;
+  completed: boolean;
+}
+
 export interface Task {
   id: string;
   text: string;
@@ -7,7 +13,8 @@ export interface Task {
   category: string;
   createdAt: number;
   dueDate: number;
-  subtasks?: string[];
+  completedAt?: number;
+  subtasks?: Subtask[];
   pointsEarned?: number;
 }
 
@@ -17,4 +24,10 @@ export interface AIAnalysisResponse {
   priority: Priority;
   category: string;
   subtasks: string[];
+}
+
+export interface WeeklyInsight {
+  score: number;
+  summary: string;
+  advice: string;
 }

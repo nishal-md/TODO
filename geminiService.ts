@@ -1,6 +1,6 @@
 
 import { GoogleGenAI, Type } from "@google/genai";
-import { AIAnalysisResponse } from "./types";
+import { AIAnalysisResponse, WeeklyInsight } from "./types";
 
 const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
@@ -38,7 +38,6 @@ export const analyzeTaskWithAI = async (taskText: string): Promise<AIAnalysisRes
     return result as AIAnalysisResponse;
   } catch (error) {
     console.error("AI Analysis failed:", error);
-    // Fallback defaults
     return {
       priority: 'medium',
       category: 'General',
@@ -47,23 +46,34 @@ export const analyzeTaskWithAI = async (taskText: string): Promise<AIAnalysisRes
   }
 };
 
-export const generateTaskSuggestions = async (existingTasks: string[]): Promise<string[]> => {
+export const getWeeklyProductivityAnalysis = async (tasks: any[]): Promise<WeeklyInsight> => {
   try {
+    const taskSummary = tasks.map(t => `${t.text} (${t.completed ? 'Completed' : 'Pending'}, Category: ${t.category})`).join(", ");
     const response = await ai.models.generateContent({
       model: "gemini-3-flash-preview",
-      contents: `Based on these existing tasks: [${existingTasks.join(", ")}], suggest 4 more related and productive tasks the user might want to add. Keep them brief and actionable.`,
+      contents: `You are a productivity coach. Analyze this user's weekly task history: [${taskSummary}]. 
+      Provide a productivity score out of 100, a brief 2-sentence summary of their performance, and one piece of actionable advice for next week.`,
       config: {
         responseMimeType: "application/json",
         responseSchema: {
-          type: Type.ARRAY,
-          items: { type: Type.STRING }
+          type: Type.OBJECT,
+          properties: {
+            score: { type: Type.NUMBER },
+            summary: { type: Type.STRING },
+            advice: { type: Type.STRING }
+          },
+          required: ["score", "summary", "advice"]
         }
       }
     });
 
-    return JSON.parse(response.text.trim());
+    return JSON.parse(response.text.trim()) as WeeklyInsight;
   } catch (error) {
-    console.error("AI Suggestion failed:", error);
-    return ["Plan weekly meals", "Organize digital files", "Read for 30 minutes", "Exercise"];
+    console.error("Weekly analysis failed:", error);
+    return {
+      score: 70,
+      summary: "You've been steady this week, keeping up with most of your commitments.",
+      advice: "Try to tackle your highest priority tasks earlier in the day to improve momentum."
+    };
   }
 };

@@ -8,39 +8,89 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
     <style>
+      :root {
+        --bg-color: #0e0e11;
+        --accent-blue: #3b82f6;
+        --accent-red: #ef4444;
+      }
       body {
         font-family: 'Inter', sans-serif;
-        background-color: #0e0e11;
+        background-color: var(--bg-color);
         color: #e3e3e3;
         overflow-x: hidden;
+        min-height: 100vh;
       }
-      .du-gradient {
-        background: linear-gradient(90deg, #ffffff, #888888);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
+      
+      /* Subtle Background Dot Grid */
+      .bg-grid {
+        position: fixed;
+        inset: 0;
+        background-image: radial-gradient(circle, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+        background-size: 40px 40px;
+        z-index: -1;
       }
+
+      /* Animated Background Blobs */
+      .bg-blob {
+        position: fixed;
+        width: 600px;
+        height: 600px;
+        border-radius: 50%;
+        filter: blur(120px);
+        opacity: 0.15;
+        z-index: -2;
+        pointer-events: none;
+      }
+      .blob-blue {
+        background: var(--accent-blue);
+        top: -100px;
+        left: -100px;
+        animation: float-blob 20s infinite alternate ease-in-out;
+      }
+      .blob-red {
+        background: var(--accent-red);
+        bottom: -100px;
+        right: -100px;
+        animation: float-blob 25s infinite alternate-reverse ease-in-out;
+      }
+
+      @keyframes float-blob {
+        0% { transform: translate(0, 0) scale(1); }
+        100% { transform: translate(100px, 50px) scale(1.1); }
+      }
+
       .glass-card {
-        background: rgba(30, 31, 32, 0.7);
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.05);
+        background: rgba(18, 18, 22, 0.6);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
       }
+
       .prompt-box-shadow {
-        box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
       }
+
       ::-webkit-scrollbar {
-        width: 8px;
+        width: 6px;
       }
       ::-webkit-scrollbar-track {
-        background: #0e0e11;
+        background: transparent;
       }
       ::-webkit-scrollbar-thumb {
-        background: #333;
-        border-radius: 4px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
       }
       ::-webkit-scrollbar-thumb:hover {
-        background: #444;
+        background: rgba(255, 255, 255, 0.2);
+      }
+      
+      .du-text-gradient {
+        background: linear-gradient(to right, #fff 20%, #666 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
       }
     </style>
   <script type="importmap">
